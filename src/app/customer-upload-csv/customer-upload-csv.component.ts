@@ -12,23 +12,29 @@ export class CustomerUploadCsvComponent implements OnInit {
   customers : Customer[];
 
   columnDefs = [
-    { field: 'make' },
-    { field: 'model' },
-    { field: 'price' }
+    { field: 'username', resizable: true},
+    { field: 'firstName', resizable: true },
+    { field: 'lastName', resizable: true },
+    { field: 'email', resizable: true },
+    { field: 'address', resizable: true }
 ];
 
-rowData = [
-    { make: 'Toyota', model: 'Celica', price: 35000 },
-    { make: 'Ford', model: 'Mondeo', price: 32000 },
-    { make: 'Porsche', model: 'Boxter', price: 72000 }
-];
+rowData : Customer[];
+
+customerUploadCsvService: any;
 
   constructor(customerUploadCsvService: CustomerUploadCsvService) { 
-    customerUploadCsvService.getCustomers().subscribe(customers => this.customers = customers);
+    this.customerUploadCsvService = customerUploadCsvService;
   }
 
-  ngOnInit(): void {    
-    
+  ngOnInit(): void { 
+    this.getCustomerDetails(); 
+  }
+
+  getCustomerDetails(): void {
+    this.customerUploadCsvService.getCustomers().subscribe(customers => 
+      this.rowData = customers
+      );
   }
 
 }

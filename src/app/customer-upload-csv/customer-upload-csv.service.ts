@@ -15,7 +15,9 @@ export interface Config {
 @Injectable()
 export class CustomerUploadCsvService {
 
-  configUrl = 'http://localhost:8080/getCustomerDetails?username=sathishssb';
+  //configUrl = 'http://localhost:8080/getCustomerDetails?username=sathishssb';
+
+  configUrl = 'http://localhost:8080/getAllCustomerDetails';
 
   constructor(private http: HttpClient) { }
 
