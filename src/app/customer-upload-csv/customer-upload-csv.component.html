@@ -2,8 +2,19 @@
 
 <p>{{customers}}</p>
 
+<p>{{isHeaderMismatch}}</p>
+
+<div *ngIf="isHeaderMismatch">Header mismatch. Please verify the csv headers</div>
+
+<div class="form-group">
+    <input type="file" (change)="onFileSelect($event.target)" name="myfile">
+    <!-- <input type="file" class="upload" (change)="changeListener($event.target.files)"> -->
+</div>
+
+<br>
+
 <ag-grid-angular
-    style="height: 1500px;"
+    style="height: 500px;"
     class="ag-theme-alpine"
     [rowData]="rowData"
     [columnDefs]="columnDefs"
