@@ -20,6 +20,7 @@ export class CustomerUploadCsvComponent implements OnInit {
   ];
 
   rowData: Customer[];
+  customerPostData: Customer[];
 
   customerUploadCsvService: any;
 
@@ -27,15 +28,13 @@ export class CustomerUploadCsvComponent implements OnInit {
   csvContent: string;
   parsedCsv: string[][];
 
-  isHeaderMismatch: boolean = false;
+  isHeaderMismatch: any = false;
 
   constructor(customerUploadCsvService: CustomerUploadCsvService) {
     this.customerUploadCsvService = customerUploadCsvService;
-    //this.isHeaderMismatch = false;
   }
 
   ngOnInit(): void {
-    //this.isHeaderMismatch = false;
     this.getCustomerDetails();
   }
 
@@ -61,45 +60,50 @@ export class CustomerUploadCsvComponent implements OnInit {
   //     }
   // }
 
-  onFileLoad(fileLoadedEvent): void {
-
-    this.isHeaderMismatch = false;
-
-    const textFromFileLoaded = fileLoadedEvent.target.result;
-    this.csvContent = textFromFileLoaded;
-
-    const txt = textFromFileLoaded;
-
-    const lines = txt.split('\n');
-    const headers = lines[0].split(',');
-    console.log(headers[0]);
-    if(headers[0] !== 'User Name' || headers[1] !== 'First Name' || headers[2] !== 'Last Name' || headers[3] !== 'email' 
-    || headers[4] !== 'Password' || headers[5] !== 'Address'){
-      this.isHeaderMismatch = true;
-    }
-    console.log(lines);
-  }
-
   onFileSelect(input: HTMLInputElement) {
 
     const files = input.files;
-    var content = this.csvContent;
+
+    //this.isHeaderMismatch = false;
 
     if (files && files.length) {
-      
-       console.log("Filename: " + files[0].name);
-       console.log("Type: " + files[0].type);
-       console.log("Size: " + files[0].size + " bytes");
-       
+
+      console.log("Filename: " + files[0].name);
+      console.log("Type: " + files[0].type);
+      console.log("Size: " + files[0].size + " bytes");
+
 
       const fileToRead = files[0];
-
       const fileReader = new FileReader();
-      fileReader.onload = this.onFileLoad;
 
       fileReader.readAsText(fileToRead, "UTF-8");
-    }
+      fileReader.onload = () => {
+        let csvData = fileReader.result;
+        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+        console.log(csvRecordsArray);
+        const headers = csvRecordsArray[0].split(',');
+        console.log(csvRecordsArray[0]);
+        if (headers[0] !== 'User Name' || headers[1] !== 'First Name' || headers[2] !== 'Last Name' || headers[3] !== 'Email'
+          || headers[4] !== 'Password' || headers[5] !== 'Address') {
+          this.isHeaderMismatch = true;
+          console.log(this.isHeaderMismatch);
+        }else{
+          this.isHeaderMismatch = false;
 
+          // for(let i = 0; i < csvRecordsArray.length; i++){
+
+          //   let tempJson={
+          //     username: csvRecordsArray[i].username;
+          //   };
+            
+            
+          // }
+
+          this.customerPostData.push();
+
+        }
+      };
+    }
   }
 
 }
